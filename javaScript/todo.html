@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <h1>add and delete the  list itemes</h1>
+    <inpit type="text" id="itemInput"placeholder="enter an item"/></inpit>
+    <button id="additembutton" onclick="addTodo()" >add items</button>
+    <ul id="itemlist"></ul>
+
+    <script>
+        let inputEle = document.getElementById("itemInput");
+        let buttonEle = document.getElementById("addItemButton");
+        let itemlist = document.getElementById("itemlist");
+
+        function addtodo(){
+            if(inputEle.value !==""){
+                let liEle = document.createElement("li")
+                liEle.textContent = inputEle.value;
+                let delBut = document.createElement("button")
+                liEle.textContent = "Delete";
+                
+                delBut.onclick= ()=>{
+                    liEle.remove()
+                }
+            
+                liEle.appendChild(delBut)
+                itemlist.appendChild(liEle)
+           
+            }
+
+            inputEle.value=""
+        }
+    </script>
+    
+    
+</body>
+</html>

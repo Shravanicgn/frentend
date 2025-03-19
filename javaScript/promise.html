@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const fetchData = new Promise((raslove,reject)=>{
+            setTimeout(()=>reslove('Data featched from server'),1000)
+
+        });
+        fetchData
+        .then((result)=>{
+            console.log(result);
+            return 'processing data';
+        })
+    </script>
+</body>
+</html>
