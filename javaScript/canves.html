@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas POC</title>
+    <script
+      src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+      integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .canvas-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #drawing-area {
+        border: 2px solid black;
+        margin: 1rem 0;
+        cursor: crosshair;
+      }
+
+      .canvas-container__tools {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .tool {
+        cursor: pointer;
+        border: 1px solid black;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        margin: 0 0.5rem;
+        background-color: lightgray;
+        border-radius: 5px;
+      }
+
+      .tool:hover {
+        background-color: gray;
+        color: white;
+      }
+
+      input[type="color"],
+      input[type="range"] {
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Canvas Paint POC</h1>
+    <div class="canvas-container">
+      <canvas id="drawing-area" height="500" width="500"></canvas>
+      <div class="canvas-container__tools">
+        <div class="tool" onclick="selectPen()">Pencil</div>
+        <div class="tool" onclick="toggleEraser()">Eraser</div>
+        <div class="tool" onclick="clearCanvas()">Clear</div>
+        <label>Color:</label>
+        <input type="color" id="colorPicker" value="#000000" />
+        <label>Brush Size:</label>
+        <input type="range" id="brushSize" min="1" max="20" value="5" />
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.querySelector("#drawing-area");
+      const ctx = canvas.getContext("2d");
+      const colorPicker = document.querySelector("#colorPicker");
+      const brushSize = document.querySelector("#brushSize");
+
+      let drawing = false;
+      let eraser = false;
+      let startX, startY;
+
+      function startDrawing(e) {
+        drawing = true;
+        startX = e.offsetX;
+        startY = e.offsetY;
+
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+      }
+
+      function draw(e) {
+        if (!drawing) return;
+        ctx.lineWidth = brushSize.value;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = eraser ? "#FFFFFF" : colorPicker.value;
+
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+      }
+
+      function stopDrawing() {
+        drawing = false;
+        ctx.beginPath();
+      }
+
+      function toggleEraser() {
+        eraser = true;
+      }
+
+      function selectPen() {
+        eraser = false;
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseleave", stopDrawing);
+    </script>
+  </body>
+</html>
